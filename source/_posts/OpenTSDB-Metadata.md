@@ -1,6 +1,6 @@
 ---
 title: OpenTSDB Metadata
-date: 2019-05-10 08:42:57
+date: 2019-05-16 08:00:00
 tags:
 keywords: OpenTSDB Metadata, OpenTSDB Metadata Search, OpenTSDB Metadata Search With Elasticsearch
 ---
@@ -170,10 +170,10 @@ OpenTSDB 本身并没有提供meta信息的搜索服务，它只提供了相关�
 **原理：**  
 当访问 查询最新上报的值我们可以使用接口 ***[/api/query/last](http://opentsdb.net/docs/build/html/api_http/query/last.html)*** 接口后，OpenTSDB 首先根据测点和相关Tags拼凑出UID，然后前往tsdb-meta表中进行查找，查找到相关记录后，找出列的最新时间戳，利用该时间戳找出最近的小时时间戳，随后拼凑出一个包含该时间戳的RowKey(该RowKey实际上就是该时间戳所在的实际记录RowKey),扫描tsdb表，随后找出最后更新的记录列，该列的值就是最后的更新值。
 
-![last_query_bug](OpenTSDB-Metadata/last_query_bug.png)
-
 **缺陷：**  
 从上面的原理上我们可以知道，查找最后上报值实际上是与最后的写入时间有关。如果存入系统的是历史数据，则tsdb-meta中的列修改时间戳，与上报时间戳是不一致的，如果发生这样的情况，拼凑出的RowKey是不存在的，所以未返回空值。
+
+![last_query_bug](OpenTSDB-Metadata/last_query_bug.png)
 
 **BUG：**   
 ***[/api/query/last](http://opentsdb.net/docs/build/html/api_http/query/last.html)*** 接口在 tsdb.storage.enable_appends = true 时存在bug，会爆空指针异常，我已经提交相应的ISSUE:[#1632](https://github.com/OpenTSDB/opentsdb/issues/1632)，并进行了[修复](https://github.com/OpenTSDB/opentsdb/pull/1634)，官方已经将其合并进入主线。
