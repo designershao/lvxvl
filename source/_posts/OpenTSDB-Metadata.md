@@ -2,6 +2,7 @@
 title: OpenTSDB Metadata
 date: 2019-05-16 08:00:00
 tags:
+desc: OpenTSDB Metadata, OpenTSDB Metadata Search, OpenTSDB Metadata Search With Elasticsearch
 keywords: OpenTSDB Metadata, OpenTSDB Metadata Search, OpenTSDB Metadata Search With Elasticsearch
 ---
 
@@ -70,7 +71,7 @@ OpenTSDB 本身并没有提供meta信息的搜索服务，它只提供了相关�
 方法：POST   
 请求体：
 
-```
+```json
 {
     "query": "name=host1 AND name=dc2",
     "limit": 100,
@@ -80,7 +81,7 @@ OpenTSDB 本身并没有提供meta信息的搜索服务，它只提供了相关�
 ```
 
 
-```
+```json
 {
     "type": "TSMETA",
     "query": "name=host1 AND name=dc2",
